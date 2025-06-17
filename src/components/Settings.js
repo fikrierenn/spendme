@@ -1,27 +1,38 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "../utils/supabaseClient";
 
-const months2024 = [
-  "Ocak 2024", "Şubat 2024", "Mart 2024", "Nisan 2024", "Mayıs 2024", "Haziran 2024", "Temmuz 2024", "Ağustos 2024", "Eylül 2024", "Ekim 2024", "Kasım 2024", "Aralık 2024"
-];
+// Mevcut yılın aylarını oluşturan fonksiyon
+const generateCurrentYearMonths = () => {
+  const currentYear = new Date().getFullYear();
+  const months = [
+    "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
+    "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"
+  ];
+  return months.map(month => `${month} ${currentYear}`);
+};
 
 export default function Settings() {
   const [theme, setTheme] = useState("light");
   const [language, setLanguage] = useState("tr");
+  const currentYearMonths = generateCurrentYearMonths();
+  
   // Genel bütçe state (her ay için ayrı tutulacak)
   const [budgetType, setBudgetType] = useState("Aylık");
   const [monthlyBudgets, setMonthlyBudgets] = useState(() => {
     const obj = {};
-    months2024.forEach(m => obj[m] = 4000);
+    currentYearMonths.forEach(m => obj[m] = 4000);
     return obj;
   });
-  const [selectedMonth, setSelectedMonth] = useState(months2024[5]); // Haziran 2024 default
+  const [selectedMonth, setSelectedMonth] = useState(() => {
+    const currentMonth = new Date().getMonth();
+    return currentYearMonths[currentMonth];
+  });
   const [editingBudget, setEditingBudget] = useState(false);
   const [budgetInput, setBudgetInput] = useState(monthlyBudgets[selectedMonth]);
   // Kategori bazlı bütçe state (her ay için ayrı tutulacak)
   const [categoryBudgets, setCategoryBudgets] = useState(() => {
     const obj = {};
-    months2024.forEach(m => {
+    currentYearMonths.forEach(m => {
       obj[m] = {
         Market: 1200,
         Ulaşım: 400,
@@ -82,7 +93,7 @@ export default function Settings() {
   const handleBudgetApplyAll = () => {
     const value = monthlyBudgets[selectedMonth];
     const updated = { ...monthlyBudgets };
-    months2024.forEach(m => { updated[m] = value; });
+    currentYearMonths.forEach(m => { updated[m] = value; });
     setMonthlyBudgets(updated);
   };
   // Kategori bütçesi kaydet
@@ -101,7 +112,7 @@ export default function Settings() {
   const handleCatBudgetsApplyAll = () => {
     const current = categoryBudgets[selectedMonth];
     const updated = { ...categoryBudgets };
-    months2024.forEach(m => { updated[m] = { ...current }; });
+    currentYearMonths.forEach(m => { updated[m] = { ...current }; });
     setCategoryBudgets(updated);
   };
 
@@ -193,7 +204,7 @@ export default function Settings() {
               onChange={e => { setSelectedMonth(e.target.value); setEditingBudget(false); setEditingCat(null); }} 
               className="rounded px-2 py-1 border border-gray-200 text-sm bg-white ml-2"
             >
-              {months2024.map(m => <option key={m} value={m}>{m}</option>)}
+              {currentYearMonths.map(m => <option key={m} value={m}>{m}</option>)}
             </select>
             <button
               className="ml-2 flex items-center justify-center w-8 h-8 rounded-full bg-white border border-brand-purple text-brand-purple text-lg shadow-sm hover:bg-brand-purple hover:text-white transition relative group"
@@ -261,7 +272,7 @@ export default function Settings() {
               onChange={e => { setSelectedMonth(e.target.value); setEditingBudget(false); setEditingCat(null); }} 
               className="rounded px-2 py-1 border border-gray-200 text-sm bg-white"
             >
-              {months2024.map(m => <option key={m} value={m}>{m}</option>)}
+              {currentYearMonths.map(m => <option key={m} value={m}>{m}</option>)}
             </select>
             <button
               className="ml-2 flex items-center justify-center w-8 h-8 rounded-full bg-white border border-brand-purple text-brand-purple text-lg shadow-sm hover:bg-brand-purple hover:text-white transition relative group"
