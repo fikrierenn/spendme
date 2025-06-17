@@ -1,0 +1,18 @@
+# Node
+node_modules/
+dist/
+build/
+.env
+
+# Capacitor
+android/
+ios/
+
+# Supabase
+.supabase/
+
+# Diğer
+.DS_Store
+.vscode/
+.idea/
+*.log 

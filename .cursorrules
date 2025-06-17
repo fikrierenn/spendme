@@ -1,0 +1,38 @@
+# .cursorrules
+
+[project]
+name = "SpendMe"
+stack = "React + Tailwind CSS + PWA"
+language = "TypeScript"
+backend = "Supabase (Postgres, Auth, Storage)"
+ai = "Gemini API tabanlı, promptlar Türkçe, mizah modları: serious, friendly, funny, clown, proxy endpoint ile güvenli kullanım"
+style = "Tailwind CSS, minimal ekstra CSS, minimalist ve güven veren finansal tasarım"
+brand = "Renk: #5B2C6F (mor), #D7BDE2, açık gri, beyaz. Font: Poppins/Inter/Open Sans"
+
+[conventions]
+component = "Fonksiyonel React component, dosya başına bir ana component"
+naming = "UI dışında İngilizce, UI metinleri Türkçe. Dosya ve değişken isimleri camelCase."
+state = "React state, context veya zustand. Global state için context veya zustand tercih edilir."
+style = "Tailwind CSS ana stil kaynağıdır. Ekstra CSS/SCSS minimumda tutulur."
+folder_structure = "src/components, src/pages, src/hooks, src/utils, src/styles, src/assets"
+test = "Unit testler zorunlu, jest/react-testing-library önerilir."
+env = ".env dosyasında gizli anahtarlar, örnek için .env.example tutulur, Gemini API anahtarı sadece backend'de saklanır."
+pwa = "Manifest, offline desteği ve mobil uyumluluk zorunlu."
+
+[ai]
+prompt_language = "Türkçe, kısa ve bağlama uygun"
+humor_modes = "serious, friendly, funny, clown"
+prompt_examples = "Her mod için örnek prompt ve çıktı README veya docs/AI_MODULES.md'de bulunur."
+ai_feedback = "AI mizahı kullanıcıya pozitif his vermeli, toksik/negatif içerik yasak"
+ai_correction = "Kullanıcı düzeltmeleri spendme_corrections tablosuna kaydedilir."
+
+[pr]
+description = "Her PR'da açıklama zorunlu, ilgili issue ile ilişkilendirilmeli"
+review = "Kod review olmadan merge edilmez"
+ci = "Testler ve linter geçmeden PR kabul edilmez"
+branch = "Ana geliştirme branch'i: main, özellikler için feature/* branch kullanılır"
+
+[other]
+language = "Tüm teknik dokümantasyon ve kod İngilizce, UI metinleri Türkçe"
+accessibility = "Renk kontrastı ve erişilebilirlik dikkate alınmalı"
+contribution = "Katkı rehberi CONTRIBUTING.md'de, kod kuralları RULES.md'de" 
