@@ -115,16 +115,84 @@ export default function Settings() {
         <button className="text-xs text-brand-purple hover:underline">Şifreyi Değiştir</button>
       </div>
 
+      {/* BANKA HESAPLARI KARTI */}
+      <div className="w-full max-w-md bg-white/80 rounded-3xl shadow-lg flex flex-col gap-3 mb-8 p-6">
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2 text-lg font-bold text-brand-purple">
+            <span className="text-2xl">🏦</span>Banka Hesapları
+          </div>
+          <button className="flex items-center justify-center w-8 h-8 rounded-full bg-brand-purple text-white text-xl shadow hover:bg-purple-900 transition">
+            <span>+</span>
+          </button>
+        </div>
+        <div className="flex flex-col gap-2">
+          {loading ? (
+            <div className="text-gray-400 text-center py-2">Yükleniyor...</div>
+          ) : error ? (
+            <div className="text-red-500 text-center py-2">{error}</div>
+          ) : bankAccounts.length === 0 ? (
+            <div className="text-gray-400 text-center py-2">Henüz banka hesabı eklenmemiş</div>
+          ) : (
+            bankAccounts.map(account => (
+              <div key={account.id} className="flex items-center gap-3 bg-white/90 rounded-2xl px-4 py-3 shadow">
+                <span className="text-xl">{account.icon}</span>
+                <span className="flex-1 font-semibold text-gray-800">{account.name}</span>
+                <button className="text-brand-purple hover:text-purple-900">Düzenle</button>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
+      {/* KREDİ KARTLARI KARTI */}
+      <div className="w-full max-w-md bg-white/80 rounded-3xl shadow-lg flex flex-col gap-3 mb-8 p-6">
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2 text-lg font-bold text-brand-purple">
+            <span className="text-2xl">💳</span>Kredi Kartları
+          </div>
+          <button className="flex items-center justify-center w-8 h-8 rounded-full bg-brand-purple text-white text-xl shadow hover:bg-purple-900 transition">
+            <span>+</span>
+          </button>
+        </div>
+        <div className="flex flex-col gap-2">
+          {loading ? (
+            <div className="text-gray-400 text-center py-2">Yükleniyor...</div>
+          ) : error ? (
+            <div className="text-red-500 text-center py-2">{error}</div>
+          ) : creditCards.length === 0 ? (
+            <div className="text-gray-400 text-center py-2">Henüz kredi kartı eklenmemiş</div>
+          ) : (
+            creditCards.map(card => (
+              <div key={card.id} className="flex items-center gap-3 bg-white/90 rounded-2xl px-4 py-3 shadow">
+                <span className="text-xl">{card.icon}</span>
+                <span className="flex-1 font-semibold text-gray-800">{card.name}</span>
+                <button className="text-brand-purple hover:text-purple-900">Düzenle</button>
+              </div>
+            ))
+          )}
+        </div>
+      </div>
+
       {/* GENEL BÜTÇE KARTI */}
       <div className="w-full max-w-md bg-white/80 rounded-3xl shadow-lg flex flex-col gap-3 mb-8 p-6">
         <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2 text-lg font-bold text-brand-purple"><span className="text-2xl">💰</span>Genel Bütçe</div>
+          <div className="flex items-center gap-2 text-lg font-bold text-brand-purple">
+            <span className="text-2xl">💰</span>Genel Bütçe
+          </div>
           <div className="flex items-center gap-2">
-            <select value={budgetType} onChange={e => setBudgetType(e.target.value)} className="rounded px-2 py-1 border border-gray-200 text-sm bg-white">
+            <select 
+              value={budgetType} 
+              onChange={e => setBudgetType(e.target.value)} 
+              className="rounded px-2 py-1 border border-gray-200 text-sm bg-white"
+            >
               <option value="Aylık">Aylık</option>
               <option value="Yıllık">Yıllık</option>
             </select>
-            <select value={selectedMonth} onChange={e => { setSelectedMonth(e.target.value); setEditingBudget(false); setEditingCat(null); }} className="rounded px-2 py-1 border border-gray-200 text-sm bg-white ml-2">
+            <select 
+              value={selectedMonth} 
+              onChange={e => { setSelectedMonth(e.target.value); setEditingBudget(false); setEditingCat(null); }} 
+              className="rounded px-2 py-1 border border-gray-200 text-sm bg-white ml-2"
+            >
               {months2024.map(m => <option key={m} value={m}>{m}</option>)}
             </select>
             <button
@@ -133,8 +201,12 @@ export default function Settings() {
               title="Tüm Yıla Uygula"
               type="button"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-brand-purple group-hover:text-white transition"><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0A8.003 8.003 0 016.058 15" /></svg>
-              <span className="absolute left-1/2 -translate-x-1/2 top-10 z-20 bg-brand-purple text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 pointer-events-none transition">Tüm Yıla Uygula</span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-brand-purple group-hover:text-white transition">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0A8.003 8.003 0 016.058 15" />
+              </svg>
+              <span className="absolute left-1/2 -translate-x-1/2 top-10 z-20 bg-brand-purple text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 pointer-events-none transition">
+                Tüm Yıla Uygula
+              </span>
             </button>
           </div>
         </div>
@@ -148,13 +220,30 @@ export default function Settings() {
                 onChange={e => setBudgetInput(e.target.value)}
                 autoFocus
               />
-              <button className="bg-brand-purple text-white rounded px-3 py-2 text-sm font-semibold hover:bg-purple-900 transition" onClick={handleBudgetSave}>Kaydet</button>
-              <button className="text-xs text-gray-400 ml-1" onClick={() => setEditingBudget(false)}>İptal</button>
+              <button 
+                className="bg-brand-purple text-white rounded px-3 py-2 text-sm font-semibold hover:bg-purple-900 transition" 
+                onClick={handleBudgetSave}
+              >
+                Kaydet
+              </button>
+              <button 
+                className="text-xs text-gray-400 ml-1" 
+                onClick={() => setEditingBudget(false)}
+              >
+                İptal
+              </button>
             </>
           ) : (
             <>
-              <span className="text-2xl font-bold text-brand-purple">{monthlyBudgets[selectedMonth]?.toLocaleString()} TL</span>
-              <button className="ml-2 flex items-center justify-center w-8 h-8 rounded-full bg-brand-purple text-white text-xl shadow hover:bg-purple-900 transition" onClick={() => { setEditingBudget(true); setBudgetInput(monthlyBudgets[selectedMonth]); }}><span>✏️</span></button>
+              <span className="text-2xl font-bold text-brand-purple">
+                {monthlyBudgets[selectedMonth]?.toLocaleString()} TL
+              </span>
+              <button 
+                className="ml-2 flex items-center justify-center w-8 h-8 rounded-full bg-brand-purple text-white text-xl shadow hover:bg-purple-900 transition" 
+                onClick={() => { setEditingBudget(true); setBudgetInput(monthlyBudgets[selectedMonth]); }}
+              >
+                <span>✏️</span>
+              </button>
             </>
           )}
         </div>
@@ -163,9 +252,15 @@ export default function Settings() {
       {/* KATEGORİ BAZLI BÜTÇELER KARTI */}
       <div className="w-full max-w-md bg-white/80 rounded-3xl shadow-lg flex flex-col gap-3 mb-8 p-6">
         <div className="flex items-center justify-between mb-2">
-          <div className="flex items-center gap-2 text-lg font-bold text-brand-purple"><span className="text-2xl">📂</span>Kategori Bazlı Bütçeler</div>
+          <div className="flex items-center gap-2 text-lg font-bold text-brand-purple">
+            <span className="text-2xl">📂</span>Kategori Bazlı Bütçeler
+          </div>
           <div className="flex items-center gap-2">
-            <select value={selectedMonth} onChange={e => { setSelectedMonth(e.target.value); setEditingBudget(false); setEditingCat(null); }} className="rounded px-2 py-1 border border-gray-200 text-sm bg-white">
+            <select 
+              value={selectedMonth} 
+              onChange={e => { setSelectedMonth(e.target.value); setEditingBudget(false); setEditingCat(null); }} 
+              className="rounded px-2 py-1 border border-gray-200 text-sm bg-white"
+            >
               {months2024.map(m => <option key={m} value={m}>{m}</option>)}
             </select>
             <button
@@ -174,42 +269,60 @@ export default function Settings() {
               title="Tüm Yıla Uygula"
               type="button"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-brand-purple group-hover:text-white transition"><path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0A8.003 8.003 0 016.058 15" /></svg>
-              <span className="absolute left-1/2 -translate-x-1/2 top-10 z-20 bg-brand-purple text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 pointer-events-none transition">Tüm Yıla Uygula</span>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5 text-brand-purple group-hover:text-white transition">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0A8.003 8.003 0 016.058 15" />
+              </svg>
+              <span className="absolute left-1/2 -translate-x-1/2 top-10 z-20 bg-brand-purple text-white text-xs rounded px-2 py-1 opacity-0 group-hover:opacity-100 pointer-events-none transition">
+                Tüm Yıla Uygula
+              </span>
             </button>
           </div>
         </div>
         <div className="flex flex-col gap-2">
-          {loading ? (
-            <div className="text-gray-400 text-center py-2">Yükleniyor...</div>
-          ) : error ? (
-            <div className="text-red-500 text-center py-2">{error}</div>
-          ) : (
-            categories.map(cat => (
-              <div key={cat.id} className="flex items-center gap-3 bg-white/90 rounded-2xl px-4 py-3 shadow">
-                <span className="text-xl">{cat.icon}</span>
-                <span className="flex-1 font-semibold text-gray-800">{cat.name}</span>
-                {editingCat === cat.name ? (
-                  <>
-                    <input
-                      type="number"
-                      className="rounded-xl border border-gray-200 p-2 w-20 text-base focus:outline-none focus:ring-2 focus:ring-brand-purple"
-                      value={catBudgetInput}
-                      onChange={e => setCatBudgetInput(e.target.value)}
-                      autoFocus
-                    />
-                    <button className="bg-brand-purple text-white rounded px-2 py-1 text-xs font-semibold hover:bg-purple-900 transition ml-1" onClick={() => handleCatBudgetSave(cat.name)}>Kaydet</button>
-                    <button className="text-xs text-gray-400 ml-1" onClick={() => setEditingCat(null)}>İptal</button>
-                  </>
-                ) : (
-                  <>
-                    <span className="text-lg font-bold text-brand-purple">{categoryBudgets[selectedMonth][cat.name]?.toLocaleString() || "-"} TL</span>
-                    <button className="ml-2 flex items-center justify-center w-7 h-7 rounded-full bg-brand-purple text-white text-base shadow hover:bg-purple-900 transition" onClick={() => { setEditingCat(cat.name); setCatBudgetInput(categoryBudgets[selectedMonth][cat.name] || ""); }}><span>✏️</span></button>
-                  </>
-                )}
-              </div>
-            ))
-          )}
+          {Object.entries(categoryBudgets[selectedMonth] || {}).map(([cat, budget]) => (
+            <div key={cat} className="flex items-center gap-3 bg-white/90 rounded-2xl px-4 py-3 shadow">
+              <span className="text-xl">
+                {cat === "Market" ? "🛒" :
+                 cat === "Ulaşım" ? "🚗" :
+                 cat === "Restoran" ? "🍽️" :
+                 cat === "Fatura" ? "📄" : "📦"}
+              </span>
+              <span className="flex-1 font-semibold text-gray-800">{cat}</span>
+              {editingCat === cat ? (
+                <>
+                  <input
+                    type="number"
+                    className="rounded-xl border border-gray-200 p-2 w-20 text-base focus:outline-none focus:ring-2 focus:ring-brand-purple"
+                    value={catBudgetInput}
+                    onChange={e => setCatBudgetInput(e.target.value)}
+                    autoFocus
+                  />
+                  <button 
+                    className="bg-brand-purple text-white rounded px-3 py-2 text-sm font-semibold hover:bg-purple-900 transition" 
+                    onClick={() => handleCatBudgetSave(cat)}
+                  >
+                    Kaydet
+                  </button>
+                  <button 
+                    className="text-xs text-gray-400 ml-1" 
+                    onClick={() => { setEditingCat(null); setCatBudgetInput(""); }}
+                  >
+                    İptal
+                  </button>
+                </>
+              ) : (
+                <>
+                  <span className="font-bold text-brand-purple">{budget?.toLocaleString()} TL</span>
+                  <button 
+                    className="ml-2 flex items-center justify-center w-8 h-8 rounded-full bg-brand-purple text-white text-xl shadow hover:bg-purple-900 transition" 
+                    onClick={() => { setEditingCat(cat); setCatBudgetInput(budget); }}
+                  >
+                    <span>✏️</span>
+                  </button>
+                </>
+              )}
+            </div>
+          ))}
         </div>
       </div>
 
@@ -250,53 +363,6 @@ export default function Settings() {
         </div>
       </div>
 
-      {/* Finansal Hesaplar */}
-      <div className="w-full max-w-md mb-8">
-        <div className="flex items-center justify-between mb-3">
-          <div className="text-brand-purple font-bold text-lg flex items-center gap-2"><span className='text-2xl'>🏦</span>Banka Hesapları</div>
-          <button className="flex items-center justify-center w-9 h-9 rounded-full bg-brand-purple text-white text-2xl shadow hover:bg-purple-900 transition"><span>+</span></button>
-        </div>
-        <div className="flex flex-col gap-3 mb-4">
-          {loading ? (
-            <div className="text-gray-400 text-center py-2">Yükleniyor...</div>
-          ) : error ? (
-            <div className="text-red-500 text-center py-2">{error}</div>
-          ) : (
-            bankAccounts.map(acc => (
-              <div key={acc.id} className="flex items-center bg-white/90 rounded-2xl shadow px-5 py-3 gap-4">
-                <span className="text-2xl">{acc.icon}</span>
-                <div className="flex-1">
-                  <div className="font-semibold text-gray-800">{acc.name}</div>
-                </div>
-                <button className="text-xs text-brand-purple hover:underline">Düzenle</button>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
-      <div className="w-full max-w-md mb-8">
-        <div className="flex items-center justify-between mb-3">
-          <div className="text-brand-purple font-bold text-lg flex items-center gap-2"><span className='text-2xl'>💳</span>Kredi Kartları</div>
-          <button className="flex items-center justify-center w-9 h-9 rounded-full bg-brand-purple text-white text-2xl shadow hover:bg-purple-900 transition"><span>+</span></button>
-        </div>
-        <div className="flex flex-col gap-3 mb-4">
-          {loading ? (
-            <div className="text-gray-400 text-center py-2">Yükleniyor...</div>
-          ) : error ? (
-            <div className="text-red-500 text-center py-2">{error}</div>
-          ) : (
-            creditCards.map(card => (
-              <div key={card.id} className="flex items-center bg-white/90 rounded-2xl shadow px-5 py-3 gap-4">
-                <span className="text-2xl">{card.icon}</span>
-                <div className="flex-1">
-                  <div className="font-semibold text-gray-800">{card.name}</div>
-                </div>
-                <button className="text-xs text-brand-purple hover:underline">Düzenle</button>
-              </div>
-            ))
-          )}
-        </div>
-      </div>
       <button className="w-full max-w-md bg-red-500 hover:bg-red-600 text-white font-semibold rounded-2xl py-3 mt-2 shadow-xl text-base transition-all active:scale-95">Çıkış Yap</button>
     </div>
   );
