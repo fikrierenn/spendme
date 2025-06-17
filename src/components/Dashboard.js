@@ -65,7 +65,11 @@ export default function Dashboard({ onAddTransaction }) {
         // Son 5 harcama (category_id ile)
         let { data: txs, error: txErr } = await supabase
           .from("spendme_transactions")
-          .select("*")
+          .select(`
+            *,
+            from_account:spendme_accounts!spendme_transactions_account_id_fkey(name),
+            to_account:spendme_accounts!spendme_transactions_to_account_id_fkey(name)
+          `)
           .eq("user_id", userId)
           .order("date", { ascending: false })
           .limit(5);
@@ -73,13 +77,14 @@ export default function Dashboard({ onAddTransaction }) {
         // Kategorileri ayrı çek
         let { data: categories, error: catErr } = await supabase
           .from("spendme_categories")
-          .select("id, name, icon")
-          .eq("user_id", userId);
+          .select("*");
         if (catErr) throw catErr;
-        // Transaction'lara kategori ekle
+        // Transaction'lara kategori ve hesap bilgilerini ekle
         const txsWithCategory = (txs || []).map(tx => ({
           ...tx,
-          category: categories.find(cat => cat.id === tx.category_id) || null
+          category: categories.find(cat => cat.id === tx.category_id) || null,
+          from_account: tx.from_account?.name,
+          to_account: tx.to_account?.name
         }));
         setTransactions(txsWithCategory);
         // Loglama
@@ -214,7 +219,7 @@ export default function Dashboard({ onAddTransaction }) {
 
       {/* Son Harcamalar */}
       <div className="w-full max-w-sm">
-        <div className="text-brand-purple font-bold mb-3 text-lg">Son Harcamalar</div>
+        <div className="text-brand-purple font-bold mb-3 text-lg">Son İşlemler</div>
         {loading ? (
           <div className="text-gray-400 text-center py-6">Yükleniyor...</div>
         ) : error ? (
@@ -226,11 +231,24 @@ export default function Dashboard({ onAddTransaction }) {
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">{tx.category?.icon || "💸"}</span>
                   <div>
-                    <div className="font-semibold text-gray-800 leading-tight">{tx.category?.name || tx.type}</div>
-                    <div className="text-xs text-gray-400">{tx.date} <span className="ml-2">{tx.description}</span></div>
+                    <div className="font-semibold text-gray-800 leading-tight">
+                      {tx.type === "transfer" ? "Transfer" : tx.category?.name || tx.type}
+                    </div>
+                    <div className="text-xs text-gray-400">
+                      {tx.date} 
+                      <span className="ml-2">
+                        {tx.type === "transfer" ? `${tx.description} (${tx.from_account} → ${tx.to_account})` : tx.description}
+                      </span>
+                    </div>
                   </div>
                 </div>
-                <div className={`text-lg font-bold ${tx.type === "income" ? "text-green-600" : "text-gray-700"}`}>{Math.abs(tx.amount)} TL</div>
+                <div className={`text-lg font-bold ${
+                  tx.type === "income" ? "text-green-600" : 
+                  tx.type === "expense" ? "text-red-600" :
+                  "text-blue-600" // transfer için
+                }`}>
+                  {Math.abs(tx.amount)} TL
+                </div>
               </li>
             ))}
           </ul>
